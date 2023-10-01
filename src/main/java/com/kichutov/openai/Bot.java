@@ -30,9 +30,11 @@ public class Bot extends TelegramLongPollingBot {
 
 
         // Ваш API-ключ от OpenAI
-        String apiKey = "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";
+//        String apiKey = "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";
+        String apiKey = "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";
 
         // Текст, который вы хотите отправить на обработку ChatGPT
+        System.out.println("Запрос к ChatGPT: " + update.getMessage().getText());
         String inputText = update.getMessage().getText();
 
         // Создаем объект RestTemplate для выполнения HTTP-запросов
