@@ -1,6 +1,8 @@
 package com.kichutov.openai;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -10,10 +12,14 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class Bot extends TelegramLongPollingBot {
 
     private static final String BOT_USERNAME = "kichutov_openai_bot";
     private static final String BOT_TOKEN = "5843175251:AAGpWQnD17Bl1nr7qz45YWcFZSc0XnOCTMg";
+
+    @Value("${openai.api.key}")
+    private String OPENAI_API_KEY;
 
     @Override
     public String getBotUsername() {
@@ -29,10 +35,6 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 
 
-        // Ваш API-ключ от OpenAI
-//        String apiKey = "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";
-        String apiKey = "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";
-
         // Текст, который вы хотите отправить на обработку ChatGPT
         System.out.println("Запрос к ChatGPT: " + update.getMessage().getText());
         String inputText = update.getMessage().getText();
@@ -42,7 +44,8 @@ public class Bot extends TelegramLongPollingBot {
 
         // Устанавливаем заголовки запроса, включая авторизацию с использованием API-ключа
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + apiKey);
+        System.out.println("OPENAI_API_KEY " + OPENAI_API_KEY);
+        headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         List<ChatGPTMessage> messages = new ArrayList<>();
